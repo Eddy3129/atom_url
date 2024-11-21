@@ -2,10 +2,10 @@
 
 one:
   original_url: MyString
-  short_code: MyString
   title: MyString
+  short_code: MyString
 
 two:
   original_url: MyString
-  short_code: MyString
   title: MyString
+  short_code: MyString

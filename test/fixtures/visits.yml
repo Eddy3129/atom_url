@@ -3,9 +3,23 @@
 one:
   url: one
   ip_address: MyString
-  geolocation: MyString
+  latitude: 1.5
+  longitude: 1.5
+  city: MyString
+  state: MyString
+  country: MyString
+  country_code: MyString
+  postal_code: MyString
+  timezone: MyString
 
 two:
   url: two
   ip_address: MyString
-  geolocation: MyString
+  latitude: 1.5
+  longitude: 1.5
+  city: MyString
+  state: MyString
+  country: MyString
+  country_code: MyString
+  postal_code: MyString
+  timezone: MyString

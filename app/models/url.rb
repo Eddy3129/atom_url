@@ -1,17 +1,25 @@
+# app/models/url.rb
+
 class Url < ApplicationRecord
   has_many :visits, dependent: :destroy
 
-  validates :original_url, presence: true, format: URI::DEFAULT_PARSER.make_regexp(%w[http https])
-  validates :short_code, presence: true, uniqueness: true, length: { maximum: 15 }
+  validates :original_url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]) }
+  validates :short_code, presence: true, uniqueness: true
 
-  before_validation :generate_short_code, on: :create
+  before_create :generate_unique_short_code
 
   private
 
-  def generate_short_code
+  
+  def assign_short_code
+    self.short_code = generate_unique_short_code
+  end
+
+  def generate_unique_short_code
     loop do
-      self.short_code = SecureRandom.urlsafe_base64(9) # Generates 12-character string
-      break unless Url.exists?(short_code: short_code)
+      code = SecureRandom.alphanumeric(6)
+      break code unless Url.exists?(short_code: code)
     end
   end
 end
+

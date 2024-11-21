@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  root "urls#index"
   resources :urls, only: [:index, :create, :show]
-
-  # Route for short URLs
-  get "/:short_code", to: "redirects#show", as: :short
+  get '/:short_code', to: 'urls#redirect', as: :short
+  # Add root route if not already present
+  root 'urls#index'
 end
