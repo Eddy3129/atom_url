@@ -68,3 +68,7 @@ end
 gem "geocoder"
 
 gem 'nokogiri'
+
+gem 'chartkick'
+
+gem 'groupdate'

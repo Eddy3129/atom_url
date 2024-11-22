@@ -13,6 +13,8 @@ class RedirectsController < ApplicationController
         Rails.logger.error "Failed to record visit for Url ID #{url.id}: #{visit.errors.full_messages.join(', ')}"
       end
 
+      url.increment!(:visit_count)
+
       redirect_to url.original_url, allow_other_host: true
     else
       render file: "#{Rails.root}/public/404.html", status: :not_found
