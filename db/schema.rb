@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_21_101549) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_24_084742) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_101549) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "visit_count"
+    t.index ["short_code"], name: "index_urls_on_short_code", unique: true
   end
 
   create_table "visits", force: :cascade do |t|

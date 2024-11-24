@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 # app/services/geolocation_service.rb
 
+# Fetches geolocation data for a given IP address using Geocoder
 class GeolocationService
   require 'geocoder'
 
@@ -8,30 +11,47 @@ class GeolocationService
   end
 
   def fetch_geolocation
-    results = Geocoder.search(@ip)
-    if results.present?
-      result = results.first
-      {
-        latitude: result.latitude,
-        longitude: result.longitude,
-        city: result.city,
-        state: result.state,
-        country: result.country,
-        country_code: result.country_code,
-        postal_code: result.postal_code,
-        timezone: result.time_zone,
-        coordinates: result.coordinates
-      }
+    result = geocode_ip
+    if result
+      extract_geolocation_data(result)
     else
       { error: "No geolocation data found for IP: #{@ip}" }
     end
-  rescue Geocoder::OverQueryLimitError
-    { error: "API query limit exceeded" }
-  rescue Geocoder::RequestDenied
-    { error: "API request was denied" }
-  rescue Geocoder::InvalidRequest
-    { error: "Invalid geocoding request" }
   rescue StandardError => e
-    { error: "An error occurred: #{e.message}" }
+    handle_error(e)
+  end
+
+  private
+
+  def geocode_ip
+    results = Geocoder.search(@ip)
+    results.first if results.present?
+  end
+
+  def extract_geolocation_data(result)
+    {
+      latitude: result.latitude,
+      longitude: result.longitude,
+      city: result.city,
+      state: result.state,
+      country: result.country,
+      country_code: result.country_code,
+      postal_code: result.postal_code,
+      timezone: result.time_zone,
+      coordinates: result.coordinates
+    }
+  end
+
+  def handle_error(error)
+    case error
+    when Geocoder::OverQueryLimitError
+      { error: 'API query limit exceeded' }
+    when Geocoder::RequestDenied
+      { error: 'API request was denied' }
+    when Geocoder::InvalidRequest
+      { error: 'Invalid geocoding request' }
+    else
+      { error: "An error occurred: #{error.message}" }
+    end
   end
 end

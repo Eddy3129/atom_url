@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RedirectsController, type: :controller do
@@ -6,9 +8,9 @@ RSpec.describe RedirectsController, type: :controller do
 
     context 'when the short_code exists' do
       it 'redirects to the original URL and creates a Visit with state and country' do
-        expect {
+        expect do
           get :show, params: { short_code: url.short_code }
-        }.to change(Visit, :count).by(1)
+        end.to change(Visit, :count).by(1)
 
         visit = Visit.last
         expect(response).to redirect_to(url.original_url)

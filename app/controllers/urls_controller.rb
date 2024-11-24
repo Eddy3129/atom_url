@@ -1,23 +1,16 @@
+# frozen_string_literal: true
+
+# Manages URL creation, listing, deletion, and deletion actions.
 class UrlsController < ApplicationController
   def index
     @url = Url.new
-    @urls = Url.order(created_at: :desc).page(params[:page]).per(10)
+    @urls = fetch_urls
   end
 
   def create
     @url = UrlShortenerService.new(url_params[:original_url]).shorten
-    @urls = Url.order(created_at: :desc).page(params[:page]).per(10)
-
-    respond_to do |format|
-      if @url.persisted?
-        format.turbo_stream
-        format.html { redirect_to root_path, notice: "URL was successfully shortened." }
-      else
-        flash.now[:alert] = @url.errors.full_messages.join(", ")
-        format.turbo_stream { render :index, status: :unprocessable_entity }
-        format.html { render :index }
-      end
-    end
+    @urls = fetch_urls
+    handle_response(@url)
   end
 
   def destroy
@@ -26,17 +19,7 @@ class UrlsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to urls_path, notice: "URL was successfully deleted." }
-    end
-  end
-
-  def bulk_delete
-    ids = params[:url_ids] || []
-    Url.where(id: ids).destroy_all
-
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(ids.map { |id| "url_#{id}" }) }
-      format.html { redirect_to urls_path, notice: "#{ids.size} URLs were successfully deleted." }
+      format.html { redirect_to urls_path, notice: t('notices.url_deleted') }
     end
   end
 
@@ -44,5 +27,26 @@ class UrlsController < ApplicationController
 
   def url_params
     params.require(:url).permit(:original_url, :title)
+  end
+
+  def fetch_urls
+    Url.order(created_at: :desc).page(params[:page]).per(10)
+  end
+
+  def handle_response(url)
+    respond_to do |format|
+      if url.persisted?
+        format.turbo_stream
+        format.html { redirect_to root_path, notice: t('notices.url_shortened') }
+      else
+        set_flash_alert(url)
+        format.turbo_stream { render :index, status: :unprocessable_entity }
+        format.html { render :index }
+      end
+    end
+  end
+
+  def flash_alert(url)
+    flash.now[:alert] = url.errors.full_messages.join(', ')
   end
 end

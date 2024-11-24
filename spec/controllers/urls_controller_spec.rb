@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UrlsController, type: :controller do
@@ -11,9 +13,9 @@ RSpec.describe UrlsController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new Url' do
-        expect {
+        expect do
           post :create, params: { url: { original_url: 'https://example.com' } }
-        }.to change(Url, :count).by(1)
+        end.to change(Url, :count).by(1)
       end
 
       it 'redirects to the created url' do
@@ -24,9 +26,9 @@ RSpec.describe UrlsController, type: :controller do
 
     context 'with invalid params' do
       it 'does not create a new Url' do
-        expect {
+        expect do
           post :create, params: { url: { original_url: 'invalid_url' } }
-        }.to change(Url, :count).by(0)
+        end.to change(Url, :count).by(0)
       end
 
       it 'renders the index template' do

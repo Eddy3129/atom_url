@@ -28,6 +28,13 @@
 #       enabled: "ON"
 
 en:
+  activerecord:
+    errors:
+      models:
+        url:
+          attributes:
+            original_url:
+              invalid_format: "must be a valid URL starting with http:// or https://"
   views:
     pagination:
       first: "<<"
@@ -44,3 +51,8 @@ en:
           other: "Displaying <b>all %{count}</b> %{entry_name}"
       more_pages:
         display_entries: "Displaying %{entry_name} <b>%{first}–%{last}</b> of <b>%{total}</b> in total"
+  notices:
+    url_shortened: "URL was successfully shortened."
+    url_deleted: "URL was successfully deleted."
+  alerts:
+    url_not_found: "URL not found."

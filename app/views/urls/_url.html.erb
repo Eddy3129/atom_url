@@ -1,7 +1,16 @@
 <!-- app/views/urls/_url.html.erb -->
 <tr id="<%= dom_id(url) %>">
   <td class="px-6 py-4 whitespace-nowrap">
-    <%= link_to short_url(url.short_code), short_path(url.short_code), target: "_blank", class: "text-yellow-400 hover:text-orange-500 font-semibold" %>
+    <button
+      type="button"
+      data-controller="copy"
+      data-copy-url-value="<%= short_url(url.short_code) %>"
+      data-action="click->copy#copy"
+      class="text-yellow-400 hover:text-orange-500 font-semibold focus:outline-none flex items-center space-x-2"
+      title="Copy to clipboard"
+    >
+      <span data-copy-target="icon"><%= short_url(url.short_code) %></span>
+    </button>
   </td>
   
   <td class="px-6 py-4 whitespace-nowrap">

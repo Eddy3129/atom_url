@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Migration to create 'visits' table with geolocation and URL reference.
 class CreateVisits < ActiveRecord::Migration[8.0]
   def change
     create_table :visits do |t|
