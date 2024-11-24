@@ -1,0 +1,49 @@
+<%= turbo_stream.replace "form-container" do %>
+  <div class="mt-8 p-8 bg-gray-800 shadow-lg rounded-lg max-w-lg mx-auto">
+    <!-- Title -->
+    <h2 class="text-2xl font-semibold text-yellow-400 mb-6 text-center">
+      Your atom.url has been generated successfully!
+    </h2>
+
+    <!-- Shortened URL Section -->
+    <div class="bg-gray-700 p-4 rounded-lg border border-yellow-500 text-lg flex items-center">
+      <!-- Shortened URL -->
+      <a href="<%= short_url(@url.short_code) %>" 
+         target="_blank" 
+         class="text-yellow-400 hover:text-orange-500 truncate flex-1 font-mono">
+        <%= short_url(@url.short_code) %>
+      </a>
+
+      <!-- Copy Icon with Tooltip -->
+      <div 
+        data-controller="copy" 
+        data-copy-url-value="<%= short_url(@url.short_code) %>" 
+        data-action="click->copy#copy"
+        class="ml-4 group cursor-pointer hover:text-orange-500 relative"
+        aria-label="Copy to clipboard" 
+        role="button">
+        
+        <!-- Tooltip -->
+        <span 
+          class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-900 text-yellow-400 text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-lg" 
+          aria-live="polite">
+          Copy to clipboard
+        </span>
+        
+        <!-- Icon Container -->
+        <div data-copy-target="icon">
+          <!-- Initial Clipboard SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 384 512">
+            <!-- Font Awesome Clipboard Icon -->
+            <path d="M280 64l40 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 128C0 92.7 28.7 64 64 64l40 0 9.6 0C121 27.5 153.3 0 192 0s71 27.5 78.4 64l9.6 0zM64 112c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16l-16 0 0 24c0 13.3-10.7 24-24 24l-88 0-88 0c-13.3 0-24-10.7-24-24l0-24-16 0zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shorten Another URL Button -->
+    <div class="mt-8 text-center">
+      <%= link_to "Shorten Another URL", root_path, class: "px-6 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-orange-500 transition-colors duration-300 font-semibold shadow-lg" %>
+    </div>
+  </div>
+<% end %>

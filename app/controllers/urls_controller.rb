@@ -1,42 +1,48 @@
 class UrlsController < ApplicationController
   def index
     @url = Url.new
-    @urls = Url.order(created_at: :desc).limit(10)
+    @urls = Url.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def create
     @url = UrlShortenerService.new(url_params[:original_url]).shorten
-    if @url
-      redirect_to @url, notice: "URL was successfully shortened."
-    else
-      @url = Url.new(url_params)
-      @urls = Url.order(created_at: :desc).limit(10)
-      flash.now[:alert] = "Failed to shorten URL."
-      render :index
+    @urls = Url.order(created_at: :desc).page(params[:page]).per(10)
+
+    respond_to do |format|
+      if @url.persisted?
+        format.turbo_stream
+        format.html { redirect_to root_path, notice: "URL was successfully shortened." }
+      else
+        flash.now[:alert] = @url.errors.full_messages.join(", ")
+        format.turbo_stream { render :index, status: :unprocessable_entity }
+        format.html { render :index }
+      end
     end
   end
 
-  def show
+  def destroy
     @url = Url.find(params[:id])
-    @visits = @url.visits.order(created_at: :desc)
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: "URL not found."
+    @url.destroy
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to urls_path, notice: "URL was successfully deleted." }
+    end
   end
 
-  def redirect
-    @url = Url.find_by(short_code: params[:short_code])
+  def bulk_delete
+    ids = params[:url_ids] || []
+    Url.where(id: ids).destroy_all
 
-    if @url
-      @url.increment!(:visit_count) # Optional: Track visit counts
-      redirect_to @url.original_url, allow_other_host: true
-    else
-      redirect_to root_path, alert: "Short URL not found."
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(ids.map { |id| "url_#{id}" }) }
+      format.html { redirect_to urls_path, notice: "#{ids.size} URLs were successfully deleted." }
     end
   end
 
   private
 
   def url_params
-    params.require(:url).permit(:original_url)
+    params.require(:url).permit(:original_url, :title)
   end
 end

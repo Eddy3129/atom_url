@@ -1,54 +1,103 @@
-<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-  <h2 class="text-2xl font-semibold mb-6">Analytics for <%= link_to "#{request.base_url}/#{@url.short_code}", short_path(@url.short_code), target: "_blank", class: "text-blue-500" %></h2>
-
-  <!-- Dropdown for selecting period -->
+<!-- app/views/urls/show.html.erb -->
+<div class="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+  
+  <!-- Back to Home Button -->
   <div class="mb-6">
-    <label for="period" class="block text-gray-700 mb-2">Select Period:</label>
-    <select id="period" name="period" onchange="location = this.value;">
+    <%= link_to "← Back to Home", root_path, class: "inline-flex items-center px-4 py-2 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-colors duration-300" %>
+  </div>
+  
+  <!-- Analytics Header -->
+  <h2 class="text-2xl font-semibold mb-4 text-yellow-400">
+    Analytics for 
+    <%= link_to "#{request.base_url}/#{@url.short_code}", short_path(@url.short_code), target: "_blank", class: "text-orange-500 hover:text-yellow-500 underline" %>
+  </h2>
+  
+  <!-- Original URL Section -->
+  <h3 class="text-lg font-semibold mb-6 text-gray-400">
+    Original URL: 
+    <%= link_to @url.original_url, @url.original_url, target: "_blank", class: "text-gray-400 hover:text-blue-500 underline break-all flex-1" %>
+  </h3>
+  
+  <!-- Dropdown for Selecting Period -->
+  <div class="mb-6">
+    <label for="period" class="block text-yellow-400 mb-2">Select Period:</label>
+    <select id="period" name="period" onchange="location = this.value;" class="w-full bg-gray-700 border border-yellow-500 text-yellow-400 py-2 px-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400">
       <option value="<%= analytics_path(@url) %>" <%= 'selected' if params[:period].blank? %>>Daily</option>
       <option value="<%= analytics_path(@url, period: 'month') %>" <%= 'selected' if params[:period] == 'month' %>>Monthly</option>
       <option value="<%= analytics_path(@url, period: 'year') %>" <%= 'selected' if params[:period] == 'year' %>>Year to Date</option>
     </select>
   </div>
-
+  
+  <!-- Charts Section -->
   <div class="flex flex-wrap mb-6">
     <!-- Line Chart for Visit Counts -->
     <div class="w-full md:w-1/2 p-2">
-      <h3 class="text-lg font-semibold mb-2">Visit Counts</h3>
+      <h3 class="text-lg font-semibold mb-2 text-yellow-400">Visit Counts</h3>
       <%= line_chart @visit_counts, height: "300px", library: {
-        title: { text: "Visits Over Time" },
-        xAxis: { title: { text: "Date" } },
-        yAxis: { title: { text: "Number of Visits" } }
+        title: { text: "Visits Over Time", style: { color: "#FBBF24" } },
+        xAxis: { title: { text: "Date", style: { color: "#FBBF24" } }, labels: { style: { color: "#D1D5DB" } } },
+        yAxis: { title: { text: "Number of Visits", style: { color: "#FBBF24" } }, labels: { style: { color: "#D1D5DB" } } },
+        legend: { itemStyle: { color: "#D1D5DB" }, itemHoverStyle: { color: "#FBBF24" } },
+        plotOptions: {
+          series: {
+            color: "#F97316", 
+            marker: {
+              fillColor: "#F97316",
+              lineColor: "#FFFFFF",
+              lineWidth: 2
+            }
+          }
+        },
+        tooltip: { style: { color: "#FFFFFF", backgroundColor: "#374151" } }
       } %>
     </div>
-
+    
     <!-- Pie Chart for Geographical Distribution -->
     <div class="w-full md:w-1/2 p-2">
-      <h3 class="text-lg font-semibold mb-2">Geographical Distribution</h3>
+      <h3 class="text-lg font-semibold mb-2 text-yellow-400">Geographical Distribution</h3>
       <%= pie_chart @geo_distribution, height: "300px", library: {
-        title: { text: "Visits by Country" }
+        title: { text: "Visits by Country", style: { color: "#FBBF24" } },
+        tooltip: { style: { color: "#FFFFFF", backgroundColor: "#374151" } },
+        plotOptions: {
+          pie: {
+            colors: ["#F97316", "#FB923C", "#FBBF24", "#FCD34D", "#F59E0B"], 
+            dataLabels: {
+              style: {
+                color: "#FFFFFF"
+              }
+            }
+          }
+        },
+        legend: { itemStyle: { color: "#D1D5DB" }, itemHoverStyle: { color: "#FBBF24" } }
       } %>
     </div>
   </div>
-
+  
   <!-- Visits Table -->
-  <h3 class="text-xl font-semibold mb-4">All Visits</h3>
-  <table class="min-w-full bg-white rounded shadow">
+  <h3 class="text-xl font-semibold mb-4 text-yellow-400">All Visits</h3>
+  <table class="min-w-full bg-gray-700 rounded shadow-lg">
     <thead>
       <tr>
-        <th class="py-2 px-4 border-b">Timestamp</th>
-        <th class="py-2 px-4 border-b">Location</th>
-        <th class="py-2 px-4 border-b">IP Address</th>
+        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+          Timestamp
+        </th>
+        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+          Location
+        </th>
+        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+          IP Address
+        </th>
       </tr>
     </thead>
     <tbody>
       <% @visits.each do |visit| %>
-        <tr>
-          <td class="py-2 px-4 border-b"><%= visit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td class="py-2 px-4 border-b"><%= "#{visit.city}, #{visit.state}, #{visit.country}" %></td>
-          <td class="py-2 px-4 border-b"><%= visit.ip_address %></td>
+        <tr class="bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= "#{visit.city}, #{visit.state}, #{visit.country}" %></td>
+          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.ip_address %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
+  
 </div>

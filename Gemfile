@@ -72,3 +72,5 @@ gem 'nokogiri'
 gem 'chartkick'
 
 gem 'groupdate'
+
+gem 'kaminari'
