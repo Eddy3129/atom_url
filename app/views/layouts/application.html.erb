@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS and Other Stylesheets -->
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload', defer: true %>
     
     <!-- JavaScript Importmap -->
@@ -18,15 +18,37 @@
 
   <body class="bg-gray-900 min-h-screen flex flex-col text-gray-100 font-sans">
     <header class="bg-gray-800 shadow-md">
-      <div class="container mx-auto px-6 py-4 flex items-center">
-        <!-- Logo -->
-        <%= link_to root_path, class: "flex items-center space-x-3" do %>
-          <%= image_tag "atom.svg", alt: "Atom URL Logo", class: "h-10 w-10" %>
-          <h1 class="text-3xl font-bold text-yellow-400">atom.url</h1>
-        <% end %>
+      <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <!-- Logo Container with flex-1 -->
+        <div class="flex-1 flex items-center space-x-3">
+          <%= link_to root_path, class: "flex items-center space-x-3" do %>
+            <%= image_tag "atom.svg", alt: "Atom URL Logo", class: "h-10 w-10" %>
+            <h1 class="text-3xl font-bold text-primary-light">atom.url</h1>
+          <% end %>
+        </div>
+
+        <!-- Authentication Buttons -->
+        <nav>
+          <ul class="flex gap-5">
+            <% if user_signed_in? %>
+              <li>
+                <%= link_to "Edit Profile", edit_user_registration_path, data: { turbo_frame: "modal" }, class: "bg-primary text-gray-900 px-4 py-2 rounded-lg hover:bg-secondary" %>
+              </li>
+              <li>
+                <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "bg-red-500 text-gray-900 px-4 py-2 rounded-lg hover:bg-red-600" %>
+              </li>
+            <% else %>
+              <li>
+                <%= link_to new_user_registration_path, data: { turbo_frame: "modal" }, class: "bg-primary text-gray-900 px-4 py-2 rounded-lg hover:bg-secondary" do %>
+                  Sign Up / Log In
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
+
       </div>
     </header>
-
 
     <main class="flex-grow container mx-auto p-6">
       <% if notice %>
@@ -47,5 +69,50 @@
     <footer class="bg-gray-800 text-gray-400 p-4 text-center">
       &copy; <%= Time.current.year %> atom.url. All rights reserved.
     </footer>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-futuristic w-full max-w-md animate-fade-in relative">
+        <%= turbo_frame_tag "modal" do %>
+          <!-- Modal content will be loaded here -->
+        <% end %>
+        <button data-action="modal#close" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200">
+          &times;
+        </button>
+      </div>
+    </div>
+
+    <!-- JavaScript to Handle Modal Display and Redirect -->
+    <script>
+      document.addEventListener("turbo:frame-load", function(event) {
+        if (event.target.id === "modal") {
+          const successElement = event.target.querySelector('[data-success="true"]');
+          if (successElement) {
+            // Redirect to root_path
+            window.location.href = "<%= root_path %>";
+          } else {
+            // Show the modal overlay
+            document.getElementById("modal-overlay").classList.remove("hidden");
+            document.getElementById("modal-overlay").classList.add("flex");
+          }
+        }
+      });
+
+      // Close modal when clicking outside the content or on the close button
+      document.getElementById("modal-overlay").addEventListener("click", function(event) {
+        if (event.target === this || event.target.matches('[data-action="modal#close"]')) {
+          this.classList.remove("flex");
+          this.classList.add("hidden");
+        }
+      });
+
+      // Close modal with Esc key
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+          document.getElementById("modal-overlay").classList.remove("flex");
+          document.getElementById("modal-overlay").classList.add("hidden");
+        }
+      });
+    </script>
   </body>
 </html>

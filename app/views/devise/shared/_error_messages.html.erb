@@ -1,0 +1,12 @@
+<% if resource.errors.any? || flash[:alert].present? %>
+  <div class="text-red-500 bg-red-100 p-4 rounded-lg mb-4">
+    <ul class="mt-2 list-disc pl-5">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      <% if flash[:alert].present? %>
+        <li><%= flash[:alert] %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

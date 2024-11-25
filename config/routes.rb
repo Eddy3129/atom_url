@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-# config/routes.rb
-
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    registrations: 'registrations',
+    sessions: 'sessions'
+  }
+
   get 'analytics/show'
   resources :urls, only: %i[index create destroy]
 
