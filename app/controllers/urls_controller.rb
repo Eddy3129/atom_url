@@ -1,52 +1,77 @@
 # frozen_string_literal: true
 
-# Manages URL creation, listing, deletion, and deletion actions.
+# This controller manages the creation, display, and deletion of shortened URLs.
 class UrlsController < ApplicationController
+  # GET /urls
   def index
     @url = Url.new
     @urls = fetch_urls
   end
 
+  # POST /urls
   def create
-    @url = UrlShortenerService.new(url_params[:original_url]).shorten
-    @urls = fetch_urls
-    handle_response(@url)
-  end
-
-  def destroy
-    @url = Url.find(params[:id])
-    @url.destroy
+    @url = create_url(url_params[:original_url])
 
     respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to urls_path, notice: t('notices.url_deleted') }
+      if @url.save
+        format.turbo_stream { handle_successful_create }
+        format.html { redirect_to root_path, notice: I18n.t('notices.url_shortened') }
+      else
+        format.turbo_stream { handle_failed_create }
+        format.html { render :new }
+      end
+    end
+  end
+
+  # DELETE /urls/:id
+  def destroy
+    @url = Url.find(params[:id])
+
+    # Ensure that the user can only delete their own URLs
+    if @url.user == current_user
+      @url.destroy
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to urls_path, notice: I18n.t('notices.url_deleted') }
+      end
+    else
+      redirect_to urls_path, alert: I18n.t('alerts.url_unauthorized_delete')
     end
   end
 
   private
 
-  def url_params
-    params.require(:url).permit(:original_url, :title)
+  # Refactored to handle URL creation and user association logic
+  def create_url(original_url)
+    url = UrlShortenerService.new(original_url).shorten
+    url.user_id = current_user.id if user_signed_in?
+    url
   end
 
+  # Handle successful URL creation (Turbo Stream response)
+  def handle_successful_create
+    render turbo_stream: [
+      turbo_stream.append('recent-urls', partial: 'url', locals: { url: @url }),
+      turbo_stream.replace('form-container', partial: 'form_success', locals: { url: @url })
+    ]
+  end
+
+  # Handle failed URL creation (Turbo Stream response)
+  def handle_failed_create
+    render turbo_stream: turbo_stream.replace('form-container', partial: 'form', locals: { url: @url })
+  end
+
+  # Fetch URLs for the current user or public URLs if not signed in
   def fetch_urls
-    Url.order(created_at: :desc).page(params[:page]).per(10)
-  end
-
-  def handle_response(url)
-    respond_to do |format|
-      if url.persisted?
-        format.turbo_stream
-        format.html { redirect_to root_path, notice: t('notices.url_shortened') }
-      else
-        set_flash_alert(url)
-        format.turbo_stream { render :index, status: :unprocessable_entity }
-        format.html { render :index }
-      end
+    if user_signed_in?
+      current_user.urls.order(created_at: :desc).page(params[:page]).per(10)
+    else
+      Url.where(user_id: nil).order(created_at: :desc).page(params[:page]).per(10)
     end
   end
 
-  def flash_alert(url)
-    flash.now[:alert] = url.errors.full_messages.join(', ')
+  # Strong parameters for URL
+  def url_params
+    params.require(:url).permit(:original_url, :title)
   end
 end

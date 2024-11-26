@@ -2,8 +2,9 @@
 
 # app/models/url.rb
 
-# Manages URL records, validates original URLs, and generates unique short codes.
+# This model defines relationship of url with users and visits
 class Url < ApplicationRecord
+  belongs_to :user, optional: true # optional for non-logged-in users
   has_many :visits, dependent: :destroy
 
   validates :original_url, presence: true, format: { with: %r{\Ahttps?://[\S]+\z}, message: :invalid_format }

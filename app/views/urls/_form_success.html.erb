@@ -1,0 +1,52 @@
+<div class="mt-4 p-8 bg-gray-800 shadow-lg rounded-lg max-w-lg mx-auto">
+  <!-- Success Title -->
+  <h2 class="text-2xl font-semibold text-green-500 mb-4 text-center flex items-center justify-center">
+    <div class="w-10 h-10 flex items-center justify-center mr-3 shrink-0">
+      <i class="fa-solid fa-circle-check text-green-400 text-xxl"></i>
+    </div>
+    URL Shortened Successfully!
+  </h2>
+
+  <!-- Website Title -->
+  <p class="text-xl text-yellow-300 text-center font-medium truncate mb-2">
+    <%= @url.title || "No Title Available" %>
+  </p>
+
+  <!-- Original URL -->
+  <p class="text-lg text-gray-400 text-center truncate mb-4">
+    Original: <a href="<%= @url.original_url %>" target="_blank" class="underline hover:text-yellow-400">
+      <%= @url.original_url %>
+    </a>
+  </p>
+
+  <% unless user_signed_in? %>
+    <p class="text-lg text-gray-300 text-center mb-4">
+      Sign up to access your links anywhere, even view data analytics for your URLs!
+    </p>
+  <% end %>
+
+  <!-- Shortened URL Section -->
+  <div class="flex items-center justify-between bg-gray-700 p-4 rounded-lg border border-yellow-500 text-lg">
+    <a href="<%= short_url(@url.short_code) %>" 
+       target="_blank" 
+       class="text-yellow-400 hover:text-blue-500 truncate flex-1 font-mono">
+      <%= short_url(@url.short_code) %>
+    </a>
+
+    <div 
+      data-controller="copy" 
+      data-copy-url-value="<%= short_url(@url.short_code) %>" 
+      data-copy-target="icon"
+      data-action="click->copy#copy"
+      class="ml-4 group cursor-pointer hover:text-orange-500 relative flex items-center justify-center w-8 h-8 bg-gray-800 rounded-full shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 384 512">
+        <path d="M280 64l40 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 128C0 92.7 28.7 64 64 64l40 0 9.6 0C121 27.5 153.3 0 192 0s71 27.5 78.4 64l9.6 0zM64 112c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16l-16 0 0 24c0 13.3-10.7 24-24 24l-88 0-88 0c-13.3 0-24-10.7-24-24l0-24-16 0zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Shorten Another URL Button -->
+  <div class="mt-12 text-center">
+    <%= link_to "Shorten Another URL", root_path, class: "px-6 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-orange-500 transition-colors duration-300 text-xl font-semibold shadow-lg" %>
+  </div>
+</div>

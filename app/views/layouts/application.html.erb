@@ -8,6 +8,9 @@
     <!-- Google Fonts: Orbitron and Space Grotesk -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Font awe: Orbitron and Space Grotesk -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <!-- Tailwind CSS and Other Stylesheets -->
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload', defer: true %>
@@ -71,7 +74,7 @@
     </footer>
 
     <!-- Modal Overlay -->
-    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" data-controller="modal">
       <div class="bg-gray-800 p-6 rounded-lg shadow-futuristic w-full max-w-md animate-fade-in relative">
         <%= turbo_frame_tag "modal" do %>
           <!-- Modal content will be loaded here -->

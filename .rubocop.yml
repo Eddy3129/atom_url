@@ -8,9 +8,13 @@ AllCops:
     - 'bin/*'
     - 'node_modules/**/*'
     - 'public/**/*'
+    - 'config/initializers/devise.rb'
     
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*.rb'
     - 'app/services/geolocation_service.rb'
     - 'db/*.rb'
+
+Layout/EndOfLine:
+   Enabled: False

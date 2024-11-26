@@ -20,12 +20,16 @@
           <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-yellow-300 uppercase tracking-wider">
             Original URL
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-yellow-300 uppercase tracking-wider">
+          <th scope="col" 
+              class="px-6 py-3 text-left text-sm font-medium text-yellow-300 uppercase tracking-wider" 
+              colspan="<%= user_signed_in? ? 1 : 2 %>">
             Title
           </th>
-          <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-yellow-300 uppercase tracking-wider">
-            Actions
-          </th>
+          <% if user_signed_in? %> <!-- Check if user is signed in -->
+            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-yellow-300 uppercase tracking-wider">
+              Actions
+            </th>
+          <% end %>
         </tr>
       </thead>
       <tbody id="recent-urls" class="bg-gray-800 divide-y divide-gray-700">
@@ -41,3 +45,4 @@
     <%= paginate @urls %>
   </div>
 </div>
+

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # AnalyticsController: Displays URL visit statistics by day, month, or year.
+# app/controllers/analytics_controller.rb
 class AnalyticsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_url
 
   def show
@@ -13,7 +15,7 @@ class AnalyticsController < ApplicationController
   private
 
   def set_url
-    @url = Url.find(params[:id])
+    @url = current_user.urls.find(params[:id]) # Only fetch URLs belonging to the signed-in user
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path, alert: t('alerts.url_not_found')
   end

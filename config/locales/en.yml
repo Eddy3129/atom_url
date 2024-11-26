@@ -56,3 +56,4 @@ en:
     url_deleted: "URL was successfully deleted."
   alerts:
     url_not_found: "URL not found."
+    url_unauthorized_delete: "You are not authorized to delete this URL."

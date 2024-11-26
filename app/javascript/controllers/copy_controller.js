@@ -8,7 +8,6 @@ export default class extends Controller {
 
   connect() {
     console.log("Copy controller connected.")
-    // Optionally, store the original SVG for easier reversion
     this.originalSVG = this.iconTarget.innerHTML
   }
 
