@@ -18,7 +18,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  password: "edison03"
+  password: <%= Rails.application.credentials.dig(:default, :password) %>
   username: postgres
   host: localhost
 
@@ -34,7 +34,7 @@ development:
   # username: url_shortener
 
   # The password associated with the PostgreSQL role (username).
-  # password: "edison03"
+  # password: default
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have

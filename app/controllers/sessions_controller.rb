@@ -6,6 +6,7 @@
 class SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
+    super
     authenticate_and_sign_in_user
 
     associate_urls_with_user

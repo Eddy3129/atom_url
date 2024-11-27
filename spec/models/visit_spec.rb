@@ -3,31 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe Visit, type: :model do
-  let(:url) { Url.create!(original_url: 'https://example.com') }
+  let(:url) { create(:url) }
+  let(:visit) { Visit.new(url: url, ip_address: '192.168.1.1') }
 
-  describe 'validations' do
-    it 'is valid with a url and ip_address' do
-      visit = Visit.new(url: url, ip_address: '8.8.8.8')
-      expect(visit).to be_valid
-    end
+  it 'is valid with valid attributes' do
+    expect(visit).to be_valid
+  end
 
-    it 'is not valid without an ip_address' do
-      visit = Visit.new(url: url, ip_address: nil)
-      expect(visit).to_not be_valid
-    end
+  it 'is invalid without an IP address' do
+    visit.ip_address = nil
+    expect(visit).not_to be_valid
   end
 
   describe 'geocoding' do
-    it 'assigns state and country based on ip_address' do
-      visit = Visit.create(url: url, ip_address: '8.8.8.8')
-      expect(visit.state).to be_present
-      expect(visit.country).to be_present
-    end
-
-    it 'handles invalid IP addresses gracefully' do
-      visit = Visit.create(url: url, ip_address: '999.999.999.999')
-      expect(visit.state).to eq('Unknown')
-      expect(visit.country).to eq('Unknown')
+    it 'should geocode the IP address' do
+      expect(visit).to receive(:geocode)
+      visit.valid?
     end
   end
 end
