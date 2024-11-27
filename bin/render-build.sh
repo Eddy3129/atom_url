@@ -1,5 +1,5 @@
-#!/usr/bin/env bash# exit on error
-set -o errexit
+#!/usr/bin/env bash
+set -o errexit  # exit on error
 
 yarn install
 bundle install
