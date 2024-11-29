@@ -49,8 +49,11 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store, { database: { writing: :primary } }
-
+  config.cache_store = :solid_cache_postgres, {
+    url: ENV.fetch['DATABASE_URL'], # Use the same database URL
+    namespace: Rails.env, # Separate the cache per environment (dev, test, prod)
+    max_size: 256.megabytes # Set cache size limits
+  }
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :primary } }
