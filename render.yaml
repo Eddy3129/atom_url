@@ -5,7 +5,6 @@ databases:
     plan: free
 
 services:
-  services:
   - type: redis
     name: cache
     ipAllowList: []
