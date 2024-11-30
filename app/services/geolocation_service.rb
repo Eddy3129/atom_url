@@ -5,13 +5,14 @@
 # Fetches geolocation data for a given IP address using Geocoder
 class GeolocationService
   BASE_URL = 'https://ipgeolocation.abstractapi.com/v1/'
+  API_KEY = ENV.fetch('ABSTRACT_API_KEY')
 
   def initialize(ip_address = nil)
     @ip_address = ip_address || request.remote_ip
   end
 
   def fetch_geolocation
-    url = "#{BASE_URL}?api_key=#{ABSTRACT_API_KEY}&ip_address=#{@ip_address}"
+    url = "#{BASE_URL}?api_key=#{API_KEY}&ip_address=#{@ip_address}"
 
     begin
       response = HTTParty.get(url)
