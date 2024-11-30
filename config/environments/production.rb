@@ -55,7 +55,9 @@ Rails.application.configure do
   config.active_job.queue_adapter = :sidekiq
 
   # Sidekiq config for Redis
-  config.cache_store = :redis_cache_store
+  config.cache_store = :redis_cache_store, {
+    url: ENV['REDIS_URL']
+  }
   config.session_store :redis_store
 
   # Ignore bad email addresses and do not raise email delivery errors.
