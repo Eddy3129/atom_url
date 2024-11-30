@@ -92,3 +92,4 @@ gem 'redis'
 
 gem 'hiredis'
 
+gem 'httparty'
