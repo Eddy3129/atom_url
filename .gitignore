@@ -51,10 +51,6 @@ yarn.lock
 /coverage
 /test/tmp
 
-# Ignore secrets and credentials (do not commit)
-config/credentials.yml.enc
-config/secrets.yml
-
 # Ignore dotenv files with environment variables (for example)
 .env.local
 .env.development.local
