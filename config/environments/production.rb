@@ -55,8 +55,8 @@ Rails.application.configure do
   config.active_job.queue_adapter = :sidekiq
 
   # Sidekiq config for Redis
-  config.cache_store = :redis_cache_store, { url: 'redis://localhost:6379/0' }
-  config.session_store :redis_store, { servers: ['redis://localhost:6379/0/session'] }
+  config.cache_store = :redis_cache_store
+  config.session_store :redis_store
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

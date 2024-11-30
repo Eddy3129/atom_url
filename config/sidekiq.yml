@@ -4,3 +4,6 @@
   - default
   - mailers
   - url_shortening
+
+production:
+  :url: <%= ENV['REDIS_URL'] %>
