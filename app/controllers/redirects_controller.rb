@@ -34,6 +34,7 @@ class RedirectsController < ApplicationController
           state: geolocation[:state],
           country: geolocation[:country]
         )
+        Rails.logger.info "Visit geolocation updated: #{geolocation[:state]}, #{geolocation[:country]}"
       end
     else
       Rails.logger.error "Failed to record visit for Url ID #{url.id}: #{visit.errors.full_messages.join(', ')}"

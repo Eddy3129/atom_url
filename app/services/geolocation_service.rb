@@ -13,8 +13,10 @@ class GeolocationService
   def fetch_geolocation
     result = geocode_ip
     if result
+      Rails.logger.info "Geolocation found: #{result.city}, #{result.state}, #{result.country}"
       extract_geolocation_data(result)
     else
+      Rails.logger.error "No geolocation data found for IP: #{@ip}"
       { error: "No geolocation data found for IP: #{@ip}" }
     end
   rescue StandardError => e
