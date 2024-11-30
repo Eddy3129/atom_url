@@ -87,3 +87,5 @@ gem 'devise'
 gem 'redis-rails'
 
 gem 'sidekiq'
+
+gem 'redis'
