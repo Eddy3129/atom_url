@@ -9,10 +9,8 @@ test:
   adapter: test
 
 production:
-  adapter: redis
-  url: <%= ENV['REDIS_URL'] %>
-  connects_to:
-    database:
-      writing: cable
-  polling_interval: 0.1.seconds
+  url: <%= ENV['REDIS_URL'] %> 
+  connects_to: 
+    database: cable 
+  polling_interval: 0.1
   message_retention: 1.day
