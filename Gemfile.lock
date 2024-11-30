@@ -270,6 +270,9 @@ GEM
     rake (13.2.1)
     rdoc (6.8.1)
       psych (>= 4.0.0)
+    redis-client (0.22.2)
+      connection_pool
+    redis-rails (0.0.0)
     regexp_parser (2.9.2)
     reline (0.5.11)
       io-console (~> 0.5)
@@ -322,6 +325,11 @@ GEM
       websocket (~> 1.0)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
+    sidekiq (7.3.6)
+      connection_pool (>= 2.3.0)
+      logger
+      rack (>= 2.2.4)
+      redis-client (>= 0.22.2)
     solid_cable (3.0.2)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -406,11 +414,13 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 8.0.0)
   rails-controller-testing
+  redis-rails
   rspec-rails
   rubocop
   rubocop-rails
   selenium-webdriver
   shoulda-matchers
+  sidekiq
   solid_cable
   solid_cache
   solid_queue
