@@ -5,19 +5,20 @@
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
 # Ignore bundler config.
-/.bundle
+.bundle
 
 # Ignore all environment files.
-/.env*
+.env*
+/.env
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
+log/*
+tmp/*
 !/log/.keep
 !/tmp/.keep
 
 # Ignore pidfiles, but keep the directory.
-/tmp/pids/*
+tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
 
@@ -28,14 +29,38 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore precompiled assets
 /public/assets
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+config/master.key
 
+# Ignore compiled JavaScript, CSS, and other build files
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
-/yarn.lock
-
+# Ignore Yarn and NPM files
+yarn.lock
 /node_modules/*
+
+# Ignore temporary files and directories from editor and OS
+.DS_Store
+*.swp
+
+# Ignore testing reports, coverage, and other test-specific directories
+/coverage
+/test/tmp
+
+# Ignore secrets and credentials (do not commit)
+config/credentials.yml.enc
+config/secrets.yml
+
+# Ignore dotenv files with environment variables (for example)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore `.ruby-version` if you are using rbenv or chruby
+.ruby-version
+
