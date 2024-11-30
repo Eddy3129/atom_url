@@ -23,6 +23,7 @@ class RedirectsController < ApplicationController
 
   def record_visit(url)
     visit = url.visits.create(ip_address: request.remote_ip)
+
     if visit.persisted?
       Rails.logger.info "Visit recorded: #{visit.inspect}"
 
@@ -32,9 +33,13 @@ class RedirectsController < ApplicationController
       if geolocation[:error].nil?
         visit.update(
           state: geolocation[:state],
-          country: geolocation[:country]
+          country: geolocation[:country],
+          latitude: geolocation[:latitude],
+          longitude: geolocation[:longitude]
         )
-        Rails.logger.info "Visit geolocation updated: #{geolocation[:state]}, #{geolocation[:country]}"
+        Rails.logger.info "Visit geolocation updated: #{geolocation[:state]}, #{geolocation[:country]}, #{geolocation[:latitude]}, #{geolocation[:longitude]}"
+      else
+        Rails.logger.error "Geolocation error for IP #{visit.ip_address}: #{geolocation[:error]}"
       end
     else
       Rails.logger.error "Failed to record visit for Url ID #{url.id}: #{visit.errors.full_messages.join(', ')}"

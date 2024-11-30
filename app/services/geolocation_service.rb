@@ -4,56 +4,45 @@
 
 # Fetches geolocation data for a given IP address using Geocoder
 class GeolocationService
-  require 'geocoder'
+  BASE_URL = 'https://ipgeolocation.abstractapi.com/v1/'
+  API_KEY = ENV.fetch['ABSTRACT_API_KEY']
 
-  def initialize(ip_address)
-    @ip = ip_address
+  def initialize(ip_address = nil)
+    @ip_address = ip_address || request.remote_ip
   end
 
   def fetch_geolocation
-    result = geocode_ip
-    if result
-      Rails.logger.info "Geolocation found: #{result.city}, #{result.state}, #{result.country}"
-      extract_geolocation_data(result)
-    else
-      Rails.logger.error "No geolocation data found for IP: #{@ip}"
-      { error: "No geolocation data found for IP: #{@ip}" }
+    url = "#{BASE_URL}?api_key=#{API_KEY}&ip_address=#{@ip_address}"
+
+    begin
+      response = HTTParty.get(url)
+      if response.success?
+        parse_geolocation_response(response)
+      else
+        { error: "Failed to retrieve geolocation data. API responded with status code #{response.code}" }
+      end
+    rescue StandardError => e
+      { error: "Error occurred while fetching geolocation: #{e.message}" }
     end
-  rescue StandardError => e
-    handle_error(e)
   end
 
   private
 
-  def geocode_ip
-    results = Geocoder.search(@ip)
-    results.first if results.present?
-  end
-
-  def extract_geolocation_data(result)
-    {
-      latitude: result.latitude,
-      longitude: result.longitude,
-      city: result.city,
-      state: result.state,
-      country: result.country,
-      country_code: result.country_code,
-      postal_code: result.postal_code,
-      timezone: result.time_zone,
-      coordinates: result.coordinates
-    }
-  end
-
-  def handle_error(error)
-    case error
-    when Geocoder::OverQueryLimitError
-      { error: 'API query limit exceeded' }
-    when Geocoder::RequestDenied
-      { error: 'API request was denied' }
-    when Geocoder::InvalidRequest
-      { error: 'Invalid geocoding request' }
+  def parse_geolocation_response(response)
+    data = response.parsed_response
+    if data['error'].present?
+      { error: data['error']['message'] }
     else
-      { error: "An error occurred: #{error.message}" }
+      {
+        city: data['city'],
+        state: data['region'],
+        country: data['country'],
+        latitude: data['latitude'],
+        longitude: data['longitude'],
+        timezone: data['timezone']['name'],
+        postal_code: data['postal_code']
+      }
     end
   end
 end
+
