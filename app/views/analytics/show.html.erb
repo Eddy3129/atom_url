@@ -1,4 +1,3 @@
-<!-- app/views/urls/show.html.erb -->
 <div class="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
   
   <!-- Back to Home Button -->
@@ -22,9 +21,9 @@
   <div class="mb-6">
     <label for="period" class="block text-yellow-400 mb-2">Select Period:</label>
     <select id="period" name="period" onchange="location = this.value;" class="w-full bg-gray-700 border border-yellow-500 text-yellow-400 py-2 px-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400">
-      <option value="<%= analytics_path(@url) %>" <%= 'selected' if params[:period].blank? %>>Daily</option>
+      <option value="<%= analytics_path(@url) %>" <%= 'selected' if params[:period].blank? %>>Past Week</option>
       <option value="<%= analytics_path(@url, period: 'month') %>" <%= 'selected' if params[:period] == 'month' %>>Monthly</option>
-      <option value="<%= analytics_path(@url, period: 'year') %>" <%= 'selected' if params[:period] == 'year' %>>Year to Date</option>
+      <option value="<%= analytics_path(@url, period: 'year') %>" <%= 'selected' if params[:period] == 'year' %>>Yearly</option>
     </select>
   </div>
   
@@ -35,14 +34,14 @@
       <h3 class="text-lg font-semibold mb-2 text-yellow-400">Visit Counts</h3>
       <%= line_chart @visit_counts, height: "300px", library: {
         title: { text: "Visits Over Time", style: { color: "#FBBF24" } },
-        xAxis: { title: { text: "Date", style: { color: "#FBBF24" } }, labels: { style: { color: "#D1D5DB" } } },
-        yAxis: { title: { text: "Number of Visits", style: { color: "#FBBF24" } }, labels: { style: { color: "#D1D5DB" } } },
-        legend: { itemStyle: { color: "#D1D5DB" }, itemHoverStyle: { color: "#FBBF24" } },
+        xAxis: { title: { text: "Date", style: { color: "#FFFFFF" } }, labels: { style: { color: "#D1D5DB" } } },
+        yAxis: { title: { text: "Number of Visits", style: { color: "#FFFFFF" } }, labels: { style: { color: "#D1D5DB" } } },
+        legend: { itemStyle: { color: "#FFFFFF" }, itemHoverStyle: { color: "#FBBF24" } },
         plotOptions: {
           series: {
-            color: "#F97316", 
+            color: "#FBBF24", 
             marker: {
-              fillColor: "#F97316",
+              fillColor: "#FBBF24",
               lineColor: "#FFFFFF",
               lineWidth: 2
             }
@@ -72,32 +71,32 @@
       } %>
     </div>
   </div>
-  
+
   <!-- Visits Table -->
-  <h3 class="text-xl font-semibold mb-4 text-yellow-400">All Visits</h3>
-  <table class="min-w-full bg-gray-700 rounded shadow-lg">
-    <thead>
-      <tr>
-        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
-          Timestamp
-        </th>
-        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
-          Location
-        </th>
-        <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
-          IP Address
-        </th>
+<h3 class="text-xl font-semibold mb-4 text-yellow-400">All Visits</h3>
+<table class="min-w-full bg-gray-700 rounded shadow-lg">
+  <thead>
+    <tr>
+      <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+        Timestamp
+      </th>
+      <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+        Location
+      </th>
+      <th class="py-2 px-4 border-b border-yellow-500 text-left text-sm font-medium text-yellow-400 uppercase tracking-wider">
+        IP Address
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @visits.each do |visit| %>
+      <tr class="bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+        <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= "#{visit.city}, #{visit.state}, #{visit.country}" %></td>
+        <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.ip_address %></td>
       </tr>
-    </thead>
-    <tbody>
-      <% @visits.each do |visit| %>
-        <tr class="bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
-          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= "#{visit.city}, #{visit.state}, #{visit.country}" %></td>
-          <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.ip_address %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+    <% end %>
+  </tbody>
+</table>
   
 </div>

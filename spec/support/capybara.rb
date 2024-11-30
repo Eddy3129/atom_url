@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/support/capybara.rb
 require 'capybara/rails'
 require 'capybara/rspec'

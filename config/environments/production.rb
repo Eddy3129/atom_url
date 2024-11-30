@@ -56,7 +56,7 @@ Rails.application.configure do
 
   # Sidekiq config for Redis
   config.cache_store = :redis_cache_store, {
-    url: ENV['REDIS_URL']
+    url: ENV.fetch('REDIS_URL', nil)
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.

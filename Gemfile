@@ -2,94 +2,133 @@
 
 source 'https://rubygems.org'
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+# Rails: Web framework for developing full-stack applications
 gem 'rails', '~> 8.0.0'
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+
+# Propshaft: Modern asset pipeline for Rails (replaces Sprockets)
 gem 'propshaft'
-# Use postgresql as the database for Active Record
+
+# PostgreSQL: Use PostgreSQL as the database for Active Record
 gem 'pg', '~> 1.1'
-# Use the Puma web server [https://github.com/puma/puma]
+
+# Puma: Web server for serving Rails apps, supports concurrent connections
 gem 'puma', '>= 5.0'
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+
+# Importmap for Rails: JavaScript with ESM import maps (no bundler required)
 gem 'importmap-rails'
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+
+# Turbo-Rails: Hotwire library for enabling SPA-like features without full JavaScript
 gem 'turbo-rails'
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+
+# Stimulus-Rails: JavaScript framework for modest interactions (part of Hotwire)
 gem 'stimulus-rails'
-# Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
+
+# TailwindCSS: Utility-first CSS framework for rapid UI development
 gem 'tailwindcss-rails'
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+
+# Jbuilder: Build JSON APIs for your Rails application
 gem 'jbuilder'
 
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# Uncomment this line to use bcrypt for secure password storage (optional)
 # gem "bcrypt", "~> 3.1.7"
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# TZInfo Data: Ensures proper timezone data on Windows and JRuby platforms
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
-# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+# Solid Cache, Solid Queue, Solid Cable: Rails database-backed adapters for cache, background jobs, and real-time features
 gem 'solid_cable'
 gem 'solid_cache'
 gem 'solid_queue'
 
-# Reduces boot times through caching; required in config/boot.rb
+# Bootsnap: Speeds up Rails boot time by caching expensive operations
 gem 'bootsnap', require: false
 
-# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+# Kamal: Deploy Rails apps to Docker environments
 gem 'kamal', require: false
 
-# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+# Thruster: HTTP asset caching and compression for Puma
 gem 'thruster', require: false
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# Uncomment this line to use image processing for Active Storage variants (optional)
 # gem "image_processing", "~> 1.2"
 
+# Development and Test specific gems
+
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  # Debugging tool for inspecting Rails apps in development
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  # Brakeman: Static analysis for security vulnerabilities in Rails apps
   gem 'brakeman', require: false
 
+  # RuboCop: Linting tool for Ruby code style enforcement
   gem 'rubocop', require: false
 
+  # RuboCop Rails: Additional RuboCop rules for Rails applications
   gem 'rubocop-rails', require: false
 
+  # dotenv-rails: Loads environment variables from a .env file
   gem 'dotenv-rails'
 end
 
+# Development-only gems
+
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
+  # Web-console: Provides an interactive console on error pages in development
   gem 'web-console'
 end
 
+# Test-specific gems
+
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  # Capybara: Integration testing tool for simulating user interaction in the browser
   gem 'capybara'
+
+  # FactoryBot: Easy factory-based object creation for tests
   gem 'factory_bot_rails'
+
+  # Faker: Generate fake data for testing
   gem 'faker'
+
+  # Rails Controller Testing: Additional testing helpers for controllers
   gem 'rails-controller-testing'
+
+  # RSpec: BDD testing framework for Ruby
   gem 'rspec-rails'
+
+  # Selenium WebDriver: WebDriver for browser-based system testing
   gem 'selenium-webdriver'
+
+  # Shoulda Matchers: Provides RSpec-compatible matchers for Rails tests
   gem 'shoulda-matchers'
 end
 
+# Geocoder: Provides geocoding and reverse geocoding functionality
 gem 'geocoder'
 
+# Nokogiri: HTML, XML parsing library (useful for scraping or XML-based APIs)
 gem 'nokogiri'
 
+# Chartkick: Easy chart creation for Rails apps
 gem 'chartkick'
 
+# Groupdate: Adds time-based grouping methods for ActiveRecord queries (e.g., by week, month, etc.)
 gem 'groupdate'
 
+# Kaminari: Pagination library for ActiveRecord collections
 gem 'kaminari'
 
+# Devise: Authentication solution for Rails apps
 gem 'devise'
 
+# Sidekiq: Background job processing for Rails apps
 gem 'sidekiq'
 
+# Redis: In-memory data structure store, required by Sidekiq
 gem 'redis'
 
+# Hiredis: Fast Redis client for Ruby
 gem 'hiredis'
 
+# HTTParty: Simplifies making HTTP requests and working with APIs
 gem 'httparty'

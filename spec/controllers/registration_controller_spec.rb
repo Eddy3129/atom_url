@@ -13,12 +13,14 @@ RSpec.describe RegistrationsController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'creates a new user and redirects to the root path' do
-        expect(User.count).to eq(1)  # Ensure there's 1 user before creation
+        expect(User.count).to eq(1) # Ensure there's 1 user before creation
 
-        post :create, params: { user: { email: 'new_user1@example.com', password: 'password123', password_confirmation: 'password123' } }
+        post :create,
+             params: { user: { email: 'new_user1@example.com', password: 'password123',
+                               password_confirmation: 'password123' } }
 
         # Verify the user was created
-        expect(User.count).to eq(2)  # The new user should be created
+        expect(User.count).to eq(2) # The new user should be created
 
         # Ensure it redirects correctly
         expect(response).to redirect_to(root_path)

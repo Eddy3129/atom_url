@@ -2,13 +2,18 @@
 
 # This controller manages the creation, display, and deletion of shortened URLs.
 class UrlsController < ApplicationController
-  # GET /urls
+  # @method index
+  # Displays the list of URLs for the current user or public URLs.
   def index
     @url = Url.new
     @urls = fetch_urls
   end
 
-  # POST /urls
+  # @method create
+  # Creates a new shortened URL and associates it with the user, if signed in.
+  #
+  # @param url_params [ActionController::Parameters] The parameters used to create a new URL
+  # @return [void]
   def create
     @url = create_url(url_params[:original_url])
 
@@ -23,7 +28,11 @@ class UrlsController < ApplicationController
     end
   end
 
-  # DELETE /urls/:id
+  # @method destroy
+  # Deletes a URL if it belongs to the currently logged-in user.
+  #
+  # @param id [Integer] The ID of the URL to be deleted
+  # @return [void]
   def destroy
     @url = Url.find(params[:id])
 
@@ -41,14 +50,18 @@ class UrlsController < ApplicationController
 
   private
 
-  # Refactored to handle URL creation and user association logic
+  # @method create_url
+  # Handles the URL creation logic, including URL shortening and user association.
+  #
+  # @param original_url [String] The original URL to shorten
+  # @return [Url] The newly created shortened URL object
   def create_url(original_url)
     url = UrlShortenerService.new(original_url).shorten
     url.user_id = current_user.id if user_signed_in?
     url
   end
 
-  # Handle successful URL creation (Turbo Stream response)
+  # @method Handle successful URL creation (Turbo Stream response)
   def handle_successful_create
     render turbo_stream: [
       turbo_stream.append('recent-urls', partial: 'url', locals: { url: @url }),
@@ -56,12 +69,12 @@ class UrlsController < ApplicationController
     ]
   end
 
-  # Handle failed URL creation (Turbo Stream response)
+  # @method Handle failed URL creation (Turbo Stream response)
   def handle_failed_create
     render turbo_stream: turbo_stream.replace('form-container', partial: 'form', locals: { url: @url })
   end
 
-  # Fetch URLs for the current user or public URLs if not signed in
+  # @method Fetch URLs for the current user or public URLs if not signed in
   def fetch_urls
     if user_signed_in?
       current_user.urls.order(created_at: :desc).page(params[:page]).per(10)
@@ -70,7 +83,8 @@ class UrlsController < ApplicationController
     end
   end
 
-  # Strong parameters for URL
+  # @method url_params
+  # Defines and filters the permitted parameters for creating or updating URLs.
   def url_params
     params.require(:url).permit(:original_url, :title)
   end
