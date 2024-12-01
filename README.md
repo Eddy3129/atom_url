@@ -65,6 +65,24 @@ Helpful links:
 - [Abstract API](https://www.abstractapi.com/api/ip-geolocation-api)
 - [Render](https://render.com/)
 
+Optionally, you can use the built in Rails credential feature to store your passkeys.
+
+```bash
+bin/rails credentials:edit
+```
+
+This will open the encrypted credentials.yml.enc file in your default editor, and any changes you make will be saved back in an encrypted format.
+
+```bash
+abstract:
+  api_key: your_api_key_here
+```
+
+To access the variables, simply do:
+```bash
+abstract_api_key = Rails.application.credentials.dig(:abstract, :api_key)
+```
+
 ### 4. Start the Development Server
 
 Once everything is set up, run the Rails server:
@@ -129,7 +147,7 @@ There are seevral limitations of this project:
 
 ### 7. **User Interface (UI) and Experience (UX)**
    - The UI is functional and basic. There's room for improvement in terms of design and user interaction to enhance the user experience.
-   - **Workaround**: Implement multiple select feature for users to delete several URLs at once, with smoother animations and loading transitions. 
+   - **Workaround**: Implement multiple select feature for users to delete several URLs at once, with smoother animations and loading transitions. Can utilize frameworks like React + Vite or Vue.js for making more dynamic animations. 
 
 ### 8. **Load Balancing and Reverse Proxy for Scalability**
    - This solution does not address the scalability and security issues when running on multiple servers. 

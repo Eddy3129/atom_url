@@ -92,7 +92,7 @@
     <% @visits.each do |visit| %>
       <tr class="bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
         <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-        <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= "#{visit.city}, #{visit.state}, #{visit.country}" %></td>
+        <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= "#{visit.state}, #{visit.country}" %></td>
         <td class="py-2 px-4 border-b border-gray-600 text-sm text-gray-200"><%= visit.ip_address %></td>
       </tr>
     <% end %>

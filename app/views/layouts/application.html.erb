@@ -8,7 +8,7 @@
     <!-- Google Fonts: Orbitron and Space Grotesk -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font awe: Orbitron and Space Grotesk -->
+    <!-- Font awesome: Orbitron and Space Grotesk -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <!-- Tailwind CSS and Other Stylesheets -->
@@ -17,6 +17,7 @@
     
     <!-- JavaScript Importmap -->
     <%= javascript_importmap_tags %>
+
   </head>
 
   <body class="bg-gray-900 min-h-screen flex flex-col text-gray-100 font-sans">
@@ -28,6 +29,12 @@
             <%= image_tag "atom.svg", alt: "Atom URL Logo", class: "h-10 w-10" %>
             <h1 class="text-3xl font-bold text-primary-light">atom.url</h1>
           <% end %>
+
+           <!-- GitHub Button -->
+           <a href="https://github.com/Eddy3129/atom_url" target="_blank" class="flex items-center space-x-2 text-primary px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-colors duration-300">
+            <i class="fab fa-github text-2xl"></i> 
+            <span class="hidden sm:inline">GitHub</span>
+          </a>
         </div>
 
         <!-- Authentication Buttons -->
