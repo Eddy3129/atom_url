@@ -5,12 +5,6 @@
 # Service to validate URL inputs and generate shortened URLs
 #
 # @param original_url [String] The original URL that needs to be shortened.
-#
-# @method initialize
-# Initializes the service with the original URL to be shortened.
-#
-# @param original_url [String] The URL to shorten.
-# @return [UrlShortenerService] An instance of the UrlShortenerService.
 class UrlShortenerService
   def initialize(original_url)
     @original_url = original_url

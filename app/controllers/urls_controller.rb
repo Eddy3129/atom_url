@@ -40,7 +40,9 @@ class UrlsController < ApplicationController
     if @url.user == current_user
       @url.destroy
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.remove(@url) # Remove the deleted URL from the page
+        end
         format.html { redirect_to urls_path, notice: I18n.t('notices.url_deleted') }
       end
     else
