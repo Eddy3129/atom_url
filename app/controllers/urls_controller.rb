@@ -15,16 +15,15 @@ class UrlsController < ApplicationController
   # @param url_params [ActionController::Parameters] The parameters used to create a new URL
   # @return [void]
   def create
-    @url = create_url(url_params[:original_url])
+    original_url = url_params[:original_url]
+    user_id = current_user&.id
+
+    # Enqueue the background job for URL shortening
+    ShortenUrlJob.perform_later(original_url, user_id)
 
     respond_to do |format|
-      if @url.save
-        format.turbo_stream { handle_successful_create }
-        format.html { redirect_to root_path, notice: I18n.t('notices.url_shortened') }
-      else
-        format.turbo_stream { handle_failed_create }
-        format.html { render :new }
-      end
+      format.turbo_stream { render_success_message }
+      format.html { redirect_to urls_path, notice: I18n.t('notices.url_processing') }
     end
   end
 
@@ -89,5 +88,15 @@ class UrlsController < ApplicationController
   # Defines and filters the permitted parameters for creating or updating URLs.
   def url_params
     params.require(:url).permit(:original_url, :title)
+  end
+
+  # @method render_success_message
+  # Renders a success message indicating that the URL is being processed.
+  def render_success_message
+    render turbo_stream: turbo_stream.replace(
+      'form-container',
+      partial: 'urls/form_success',
+      locals: { message: I18n.t('notices.url_processing') }
+    )
   end
 end
