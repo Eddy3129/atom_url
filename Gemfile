@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 # Rails: Web framework for developing full-stack applications
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.0.1'
 
 # Propshaft: Modern asset pipeline for Rails (replaces Sprockets)
 gem 'propshaft'
